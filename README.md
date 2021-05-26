@@ -27,6 +27,10 @@ Run the bot
 virtualenv venv
 venv/bin/python bot.py
 ```
+###HEROKU
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.
+com/https://github.com/zeuslord224/ezWhisperBot.git)
 
 ### License
 
