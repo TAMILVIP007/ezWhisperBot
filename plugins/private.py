@@ -104,13 +104,12 @@ async def show_main_page(_, cq: CallbackQuery):
 @Client.on_callback_query(filters.regex("^list_whispers$"))
 async def list_whispers(_, cq: CallbackQuery):
     user_id = cq.from_user.id
-    user_whispers = [
+    if user_whispers := [
         i for i in whispers.values() if i['sender_uid'] == user_id
-    ]
-    if len(user_whispers) == 0:
-        text = "You don't have any whispers"
-    else:
+    ]:
         text = f"You have **{len(user_whispers)}** whispers"
+    else:
+        text = "You don't have any whispers"
     reply_markup = InlineKeyboardMarkup(
         [
             [
@@ -136,17 +135,16 @@ async def list_whispers(_, cq: CallbackQuery):
 @Client.on_callback_query(filters.regex("delete_my_whispers"))
 async def delete_my_whispers(_, cq: CallbackQuery):
     user_id = cq.from_user.id
-    deleted_whispers = [
+    if deleted_whispers := [
         whispers.pop(k)
         for k, v in list(whispers.items())
         if v['sender_uid'] == user_id
-    ]
-    if len(deleted_whispers) == 0:
-        await cq.answer("You don't have any whispers")
-    else:
+    ]:
         await cq.answer(f"Removed {len(deleted_whispers)} whispers")
         utcnow = datetime.utcnow().strftime('%F %T')
         await cq.edit_message_text(
             f"Your whispers has been removed at `{utcnow}`",
             reply_markup=cq.message.reply_markup
         )
+    else:
+        await cq.answer("You don't have any whispers")
